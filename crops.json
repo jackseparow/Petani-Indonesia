@@ -1,0 +1,94 @@
+{
+  "game_title": "Taman Numerasi - Sustainable Farming",
+  "version": "1.0.0",
+  "master_crops": [
+    {
+      "id": "jagung",
+      "name": "Jagung",
+      "category": "carbohydrate",
+      "water_needed": 10,
+      "soil_impact": -15,
+      "bee_attraction": 1,
+      "oxygen_yield": 3,
+      "base_yield": 20,
+      "price_per_unit": 5000
+    },
+    {
+      "id": "sorgum",
+      "name": "Sorgum",
+      "category": "carbohydrate",
+      "water_needed": 3,
+      "soil_impact": 2,
+      "bee_attraction": 1,
+      "oxygen_yield": 3,
+      "base_yield": 12,
+      "price_per_unit": 6000
+    },
+    {
+      "id": "jeruk",
+      "name": "Jeruk",
+      "category": "fruit",
+      "water_needed": 8,
+      "soil_impact": -8,
+      "bee_attraction": 8,
+      "oxygen_yield": 4,
+      "base_yield": 15,
+      "price_per_unit": 12000
+    },
+    {
+      "id": "buah_naga",
+      "name": "Buah Naga",
+      "category": "fruit",
+      "water_needed": 2,
+      "soil_impact": -3,
+      "bee_attraction": 5,
+      "oxygen_yield": 2,
+      "base_yield": 10,
+      "price_per_unit": 15000
+    },
+    {
+      "id": "bayam",
+      "name": "Bayam",
+      "category": "leafy_vegetable",
+      "water_needed": 7,
+      "soil_impact": -4,
+      "bee_attraction": 0,
+      "oxygen_yield": 8,
+      "base_yield": 25,
+      "price_per_unit": 3000
+    },
+    {
+      "id": "kelor",
+      "name": "Kelor",
+      "category": "leafy_vegetable",
+      "water_needed": 3,
+      "soil_impact": 1,
+      "bee_attraction": 2,
+      "oxygen_yield": 6,
+      "base_yield": 15,
+      "price_per_unit": 4000
+    },
+    {
+      "id": "kacang_tanah",
+      "name": "Kacang Tanah",
+      "category": "legume",
+      "water_needed": 5,
+      "soil_impact": 10,
+      "bee_attraction": 3,
+      "oxygen_yield": 3,
+      "base_yield": 8,
+      "price_per_unit": 8000
+    },
+    {
+      "id": "orok_orok",
+      "name": "Orok-Orok",
+      "category": "legume",
+      "water_needed": 2,
+      "soil_impact": 25,
+      "bee_attraction": 4,
+      "oxygen_yield": 4,
+      "base_yield": 0,
+      "price_per_unit": 0
+    }
+  ]
+}
