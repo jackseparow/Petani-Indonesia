@@ -1,5 +1,5 @@
 {
-  "game_title": "Taman Numerasi - Sustainable Farming",
+  "game_title": "Petani Bijaksana",
   "version": "1.0.0",
   "master_crops": [
     {
@@ -11,7 +11,8 @@
       "bee_attraction": 1,
       "oxygen_yield": 3,
       "base_yield": 20,
-      "price_per_unit": 5000
+      "price_per_unit": 5000,
+      "icon": "assets/images/crops/jagung.png"
     },
     {
       "id": "sorgum",
@@ -22,7 +23,8 @@
       "bee_attraction": 1,
       "oxygen_yield": 3,
       "base_yield": 12,
-      "price_per_unit": 6000
+      "price_per_unit": 6000,
+      "icon": "assets/images/crops/sorgum.png"
     },
     {
       "id": "jeruk",
@@ -33,7 +35,8 @@
       "bee_attraction": 8,
       "oxygen_yield": 4,
       "base_yield": 15,
-      "price_per_unit": 12000
+      "price_per_unit": 12000,
+      "icon": "assets/images/crops/jeruk.png"
     },
     {
       "id": "buah_naga",
@@ -44,7 +47,8 @@
       "bee_attraction": 5,
       "oxygen_yield": 2,
       "base_yield": 10,
-      "price_per_unit": 15000
+      "price_per_unit": 15000,
+      "icon": "assets/images/crops/buah_naga.png"
     },
     {
       "id": "bayam",
@@ -55,7 +59,8 @@
       "bee_attraction": 0,
       "oxygen_yield": 8,
       "base_yield": 25,
-      "price_per_unit": 3000
+      "price_per_unit": 3000,
+      "icon": "assets/images/crops/bayam.png"
     },
     {
       "id": "kelor",
@@ -66,7 +71,8 @@
       "bee_attraction": 2,
       "oxygen_yield": 6,
       "base_yield": 15,
-      "price_per_unit": 4000
+      "price_per_unit": 4000,
+      "icon": "assets/images/crops/kelor.png"
     },
     {
       "id": "kacang_tanah",
@@ -77,7 +83,8 @@
       "bee_attraction": 3,
       "oxygen_yield": 3,
       "base_yield": 8,
-      "price_per_unit": 8000
+      "price_per_unit": 8000,
+      "icon": "assets/images/crops/kacang_tanah.png"
     },
     {
       "id": "orok_orok",
@@ -88,7 +95,8 @@
       "bee_attraction": 4,
       "oxygen_yield": 4,
       "base_yield": 0,
-      "price_per_unit": 0
+      "price_per_unit": 0,
+      "icon": "assets/images/crops/orok_orok.png"
     }
   ]
 }
