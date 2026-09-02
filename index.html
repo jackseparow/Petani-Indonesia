@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taman Numerasi - Sustainable Farming Simulator</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0fdf4; color: #166534; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    h1 { text-align: center; color: #15803d; }
+    .status-bar { display: flex; justify-content: space-around; background: #dcfce7; padding: 15px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .card { border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; background: #f0fdf4; }
+    .card label { font-weight: bold; display: block; margin-bottom: 5px; }
+    .card input { width: 60px; padding: 5px; }
+    .actions { margin-top: 20px; text-align: center; }
+    button { background: #16a34a; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #15803d; }
+    #log { margin-top: 20px; background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🌱 Taman Numerasi: Sustainable Farming</h1>
+  
+  <div class="status-bar">
+    <div>Musim: <span id="lbl-season">1</span></div>
+    <div>Kesehatan Tanah: <span id="lbl-soil">100</span>%</div>
+    <div>Stok Air: <span id="lbl-water">100</span> Unit</div>
+    <div>Uang Total: Rp <span id="lbl-money">0</span></div>
+  </div>
+
+  <h3>Form Perencanaan Alokasi Lahan (Total Lahan: 10 Petak)</h3>
+  <div class="grid" id="crop-inputs"></div>
+
+  <h3 style="margin-top: 20px;">Input Tambahan</h3>
+  <div class="grid">
+    <div class="card">
+      <label>Hasil Rusak Ditinggal (Humus):</label>
+      <input type="number" id="inp-humus" value="0" min="0"> Unit
+    </div>
+    <div class="card">
+      <label>Booster Kimia (Sintetis):</label>
+      <input type="number" id="inp-booster" value="0" min="0"> Dosis
+    </div>
+  </div>
+
+  <div class="actions">
+    <button onclick="runTurn()">Proses Musim Panen ➔</button>
+  </div>
+
+  <h3>Log Evaluasi Simulasi</h3>
+  <div id="log">Siap memulai simulasi Musim 1...</div>
+</div>
+
+<script src="engine.js"></script>
+<script>
+  let gameEngine;
+  let cropsData = [];
+
+  // Load JSON Master Crops Data
+  fetch('crops.json')
+    .then(res => res.json())
+    .then(data => {
+      cropsData = data.master_crops;
+      gameEngine = new SustainableFarmingEngine(cropsData, 100, 100);
+      renderCropInputs();
+    });
+
+  function renderCropInputs() {
+    const container = document.getElementById('crop-inputs');
+    container.innerHTML = '';
+    cropsData.forEach(crop => {
+      container.innerHTML += `
+        <div class="card">
+          <label>${crop.name} (${crop.category})</label>
+          <small>Air: ${crop.water_needed} | Impact Tanah: ${crop.soil_impact}</small><br>
+          Petak Ditanam: <input type="number" id="crop-${crop.id}" value="0" min="0">
+        </div>
+      `;
+    });
+  }
+
+  function runTurn() {
+    const allocations = cropsData.map(crop => ({
+      cropId: crop.id,
+      plots: parseInt(document.getElementById(`crop-${crop.id}`).value) || 0
+    }));
+
+    const humus = parseInt(document.getElementById('inp-humus').value) || 0;
+    const booster = parseInt(document.getElementById('inp-booster').value) || 0;
+
+    const res = gameEngine.processSeason(allocations, humus, 0, booster);
+
+    document.getElementById('lbl-season').innerText = res.season;
+    document.getElementById('lbl-soil').innerText = res.nextSoilHealth;
+    document.getElementById('lbl-money').innerText = res.totalMoney.toLocaleString('id-ID');
+
+    const logEl = document.getElementById('log');
+    logEl.innerText = `=== HASIL MUSIM ${res.season - 1} ===\n` +
+      `• Pendapatan Panen   : Rp ${res.harvestIncome.toLocaleString('id-ID')}\n` +
+      `• Total Uang Kas     : Rp ${res.totalMoney.toLocaleString('id-ID')}\n` +
+      `• Konsumsi Air       : ${res.waterNeeded} / 100 unit ${res.isWaterDeficit ? '⚠️ (KRISIS AIR!)' : '✅'}\n` +
+      `• Oksigen Dihasilkan : ${res.oxygenProduced} Poin\n` +
+      `• Indeks Lebah       : ${res.beeIndex} Poin\n` +
+      `• Kesehatan Tanah    : ${res.nextSoilHealth}%\n\n` + logEl.innerText;
+  }
+</script>
+
+</body>
+</html>
