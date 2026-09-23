@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taman Numerasi: Sustainable Farming</title>
+    <title>Petani Indonesia: Sustainable Farming</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -18,13 +18,6 @@
         @keyframes popIn {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
-        }
-        .bee-fly {
-            animation: fly 3s infinite ease-in-out;
-        }
-        @keyframes fly {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(10px, -8px) rotate(10deg); }
         }
         /* Custom scrollbar */
         ::-webkit-scrollbar {
@@ -43,11 +36,11 @@
 </head>
 <body class="bg-stone-100 text-stone-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header Banner dengan Logo BBGP DIY & Maskot Si Yo -->
+    <!-- Header Banner -->
     <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-500">
         <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
             
-            <!-- Sisi Kiri: Logo BBGTK / BBGP DIY -->
+            <!-- Sisi Kiri: Logo BBGTK DIY -->
             <div class="flex items-center gap-3 shrink-0">
                 <img src="bbgtk diy logo.png" 
                      alt="Logo BBGTK DIY" 
@@ -55,115 +48,62 @@
                      onerror="this.onerror=null; this.src='https://placehold.co/120x60/10b981/ffffff?text=BBGTK+DIY';">
             </div>
 
-            <!-- Bagian Tengah: Judul Game & Subtitle -->
+            <!-- Bagian Tengah: Judul & Subtitle -->
             <div class="text-center flex-1 my-auto">
                 <div class="flex items-center justify-center gap-2">
                     <span class="bg-amber-500 text-stone-900 text-xs font-black px-2 py-0.5 rounded tracking-wide uppercase">Taman Numerasi</span>
-                    <h1 class="text-xl md:text-2xl font-black tracking-wide text-amber-300 drop-shadow">SUSTAINABLE FARMING</h1>
+                    <h1 class="text-xl md:text-3xl font-black tracking-wide text-amber-300 drop-shadow">PETANI INDONESIA</h1>
                 </div>
                 <p class="text-xs md:text-sm text-emerald-100 font-medium hidden sm:block mt-0.5">
-                    Gim Edutainment Simulasi Pertanian Berkelanjutan & Model Matematika Lingkungan
+                    Simulasi Pertanian Berkelanjutan & Model Matematika Lingkungan
                 </p>
             </div>
 
             <!-- Sisi Kanan: Maskot Si Yo -->
-            <div class="flex items-center gap-2 shrink-0 bg-emerald-900/60 p-1.5 rounded-lg border border-emerald-600/50">
+            <div class="flex flex-col items-center justify-center shrink-0 bg-emerald-900/60 p-1.5 rounded-lg border border-emerald-600/50">
                 <img src="maskot-siyo.png" 
                      alt="Maskot Si Yo" 
-                     class="h-12 md:h-16 w-auto object-contain drop-shadow-md"
+                     class="h-10 md:h-14 w-auto object-contain drop-shadow-md"
                      onerror="this.onerror=null; this.src='https://placehold.co/80x80/f59e0b/ffffff?text=Si+Yo';">
-                <div class="hidden lg:block text-right pr-1">
-                    <div class="text-xs font-bold text-amber-300">Si Yo</div>
-                    <div class="text-[10px] text-emerald-200 leading-tight">Maskot Taman<br>Numerasi</div>
-                </div>
+                <span class="text-xs font-bold text-amber-300 leading-none mt-1">Si Yo</span>
             </div>
 
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main Container Layout: Kiri (Kontrol/Tanaman) & Kanan (Lahan Pertanian) -->
     <main class="max-w-7xl mx-auto px-4 py-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
 
-        <!-- KIRI: Denah Lahan Pertanian Vertikal (Grid Kapling) -->
-        <section class="lg:col-span-5 flex flex-col gap-3">
-            <div class="bg-white p-4 rounded-xl shadow-md border border-stone-200">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="font-bold text-stone-700 flex items-center gap-2 text-sm md:text-base">
-                        <i data-lucide="map" class="text-emerald-600 w-5 h-5"></i>
-                        Denah Kapling Lahan (Grid 4x4)
-                    </h2>
-                    <span class="text-xs bg-stone-100 text-stone-600 px-2 py-1 rounded font-semibold border" id="season-badge">
-                        Musim ke-1
-                    </span>
-                </div>
-
-                <!-- Status Lingkungan Lahan -->
-                <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
-                    <div class="bg-amber-50 p-2 rounded border border-amber-200">
-                        <div class="text-amber-800 font-medium flex items-center gap-1">
-                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Kesehatan Tanah
-                        </div>
-                        <div class="text-lg font-black text-amber-900" id="soil-health-val">100%</div>
-                    </div>
-                    <div class="bg-blue-50 p-2 rounded border border-blue-200">
-                        <div class="text-blue-800 font-medium flex items-center gap-1">
-                            <i data-lucide="droplet" class="w-3.5 h-3.5"></i> Air Bersih
-                        </div>
-                        <div class="text-lg font-black text-blue-900" id="water-bank-val">100/100</div>
-                    </div>
-                    <div class="bg-emerald-50 p-2 rounded border border-emerald-200">
-                        <div class="text-emerald-800 font-medium flex items-center gap-1">
-                            <i data-lucide="bug" class="w-3.5 h-3.5"></i> Lebah/Penyerbuk
-                        </div>
-                        <div class="text-lg font-black text-emerald-900" id="bee-pop-val">0</div>
-                    </div>
-                </div>
-
-                <!-- Grid Strimin Kapling (4x4 Top-Down / Landscape Vertikal) -->
-                <div id="farm-grid" class="grid grid-cols-4 gap-2 bg-stone-800 p-3 rounded-lg border-2 border-stone-700 aspect-square shadow-inner relative">
-                    <!-- Dynamic Tiles Generated by JS -->
-                </div>
-
-                <div class="mt-2 text-[11px] text-stone-500 flex justify-between items-center px-1">
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Tanah Subur (>70%)</span>
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Tanah Sedang</span>
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> Tanah Rusak (<30%)</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- KANAN: Panel Kontrol Tahapan & Manajemen -->
-        <section class="lg:col-span-7 flex flex-col gap-4">
+        <!-- KIRI: Panel Kontrol, Stepper Tahapan & Daftar Tanaman (5 Kolom) -->
+        <section class="lg:col-span-5 flex flex-col gap-4 order-2 lg:order-1">
 
             <!-- Stepper Navigasi Tahapan -->
             <div class="bg-white p-2.5 rounded-xl shadow-md border border-stone-200 grid grid-cols-3 gap-2">
-                <button id="step-btn-1" class="step-btn active bg-emerald-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition">
-                    <span class="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-xs">1</span>
+                <button id="step-btn-1" class="step-btn active bg-emerald-600 text-white font-bold py-2 px-2 rounded-lg text-xs flex items-center justify-center gap-1 transition">
+                    <span class="w-4 h-4 rounded-full bg-white/20 text-white flex items-center justify-center text-[10px]">1</span>
                     Perencanaan
                 </button>
-                <button id="step-btn-2" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed" disabled>
-                    <span class="w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-xs">2</span>
+                <button id="step-btn-2" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-2 rounded-lg text-xs flex items-center justify-center gap-1 transition opacity-60 cursor-not-allowed" disabled>
+                    <span class="w-4 h-4 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-[10px]">2</span>
                     Pemeliharaan
                 </button>
-                <button id="step-btn-3" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed" disabled>
-                    <span class="w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-xs">3</span>
+                <button id="step-btn-3" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-2 rounded-lg text-xs flex items-center justify-center gap-1 transition opacity-60 cursor-not-allowed" disabled>
+                    <span class="w-4 h-4 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-[10px]">3</span>
                     Panen & Residu
                 </button>
             </div>
 
             <!-- TAHAP 1: PERENCANAAN -->
             <div id="panel-step-1" class="bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
-                <div class="border-b pb-2 mb-3 flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold text-stone-800 text-base">Tahap 1: Perencanaan Alokasi Lahan</h3>
-                        <p class="text-xs text-stone-500">Pilih jenis tanaman lalu klik pada kapling lahan di sebelah kiri.</p>
-                    </div>
+                <div class="border-b pb-2 mb-3">
+                    <h3 class="font-bold text-stone-800 text-base">Tahap 1: Perencanaan Alokasi Lahan</h3>
+                    <p class="text-xs text-stone-500">Pilih jenis tanaman lalu klik kapling lahan di sebelah kanan.</p>
                 </div>
 
                 <!-- Pilihan Tanaman (Master Crops) -->
                 <div class="mb-4">
-                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Pilih Tanaman untuk Ditanam:</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="crop-selector">
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Daftar Pilihan Tanaman:</label>
+                    <div class="grid grid-cols-2 gap-2" id="crop-selector">
                         <!-- Generated dynamically by JS -->
                     </div>
                 </div>
@@ -180,7 +120,7 @@
                     </div>
                     <div id="water-warning" class="hidden text-red-600 font-bold bg-red-50 p-1.5 rounded border border-red-200 flex items-center gap-1">
                         <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-                        Peringatan: Kebutuhan air melebihi stok air! Akan memicu krisis air ($\lambda_t$).
+                        Peringatan: Kebutuhan air melebihi stok! Pemicu krisis air ($\lambda_t$).
                     </div>
                 </div>
 
@@ -188,7 +128,7 @@
                     <button id="btn-clear-plan" class="px-3 py-2 bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold rounded-lg transition">
                         Reset Plan
                     </button>
-                    <button id="btn-start-planting" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-lg shadow-md flex items-center gap-2 transition">
+                    <button id="btn-start-planting" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-lg shadow-md flex items-center gap-1.5 transition">
                         <i data-lucide="sprout" class="w-4 h-4"></i> Mulai Tanam & Ke Pemeliharaan
                     </button>
                 </div>
@@ -198,13 +138,13 @@
             <div id="panel-step-2" class="hidden bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
                 <div class="border-b pb-2 mb-3">
                     <h3 class="font-bold text-stone-800 text-base">Tahap 2: Pemeliharaan & Pertumbuhan</h3>
-                    <p class="text-xs text-stone-500">Pantau pertumbuhan tanaman. Anda dapat menjeda waktu untuk memberikan pupuk booster.</p>
+                    <p class="text-xs text-stone-500">Pantau pertumbuhan tanaman dan berikan pupuk booster jika diperlukan.</p>
                 </div>
 
                 <!-- Timeline Bar / Garis Waktu -->
                 <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 mb-4">
                     <div class="flex justify-between items-center text-xs font-bold text-stone-700 mb-1">
-                        <span>Garis Waktu Pertumbuhan Musim Tanam</span>
+                        <span>Garis Waktu Musim Tanam</span>
                         <span id="timeline-text">0 / 100 Hari</span>
                     </div>
                     <div class="w-full bg-stone-200 h-4 rounded-full overflow-hidden p-0.5 border">
@@ -213,14 +153,12 @@
                     
                     <!-- Time Controls -->
                     <div class="flex items-center justify-between mt-3">
-                        <div class="flex gap-2">
-                            <button id="btn-pause-toggle" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded flex items-center gap-1 transition">
-                                <i data-lucide="pause" class="w-3.5 h-3.5" id="pause-icon"></i>
-                                <span id="pause-btn-text">Pause Waktu</span>
-                            </button>
-                        </div>
+                        <button id="btn-pause-toggle" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded flex items-center gap-1 transition">
+                            <i data-lucide="pause" class="w-3.5 h-3.5" id="pause-icon"></i>
+                            <span id="pause-btn-text">Pause Waktu</span>
+                        </button>
                         <div class="text-xs text-stone-500 font-semibold" id="growth-stage-label">
-                            Fase: Generatif Awal
+                            Fase: Vegetatif
                         </div>
                     </div>
                 </div>
@@ -228,13 +166,13 @@
                 <!-- Input Booster Kimia -->
                 <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 mb-4">
                     <h4 class="font-bold text-amber-900 text-xs mb-1 flex items-center gap-1">
-                        <i data-lucide="zap" class="w-4 h-4 text-amber-600"></i> Berikan Booster Pupuk Kimia Non-Organik ($B_t$)
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-600"></i> Booster Pupuk Kimia ($B_t$)
                     </h4>
-                    <p class="text-[11px] text-amber-800 mb-2">Mendongkrak panen secara instan, tetapi menyisakan residu kimia yang merusak kesehatan tanah ($-\delta \cdot B_t^2$).</p>
+                    <p class="text-[11px] text-amber-800 mb-2">Mendongkrak panen secara instan, namun berisiko merusak tanah jangka panjang.</p>
                     
                     <div class="flex items-center gap-3">
                         <input type="range" id="booster-slider" min="0" max="10" value="0" class="flex-1 accent-amber-600">
-                        <span id="booster-val-text" class="font-black text-amber-900 text-sm bg-white px-2 py-1 rounded border border-amber-300">0 Dosis</span>
+                        <span id="booster-val-text" class="font-black text-amber-900 text-xs bg-white px-2 py-1 rounded border border-amber-300">0 Dosis</span>
                     </div>
                 </div>
 
@@ -248,43 +186,107 @@
             <!-- TAHAP 3: PANEN & RESIDU -->
             <div id="panel-step-3" class="hidden bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
                 <div class="border-b pb-2 mb-3">
-                    <h3 class="font-bold text-stone-800 text-base">Tahap 3: Perencanaan Panen & Kelola Residu Organik</h3>
-                    <p class="text-xs text-stone-500">Tentukan penanganan hasil panen rusak dan sisa tanaman untuk menjaga humus tanah.</p>
+                    <h3 class="font-bold text-stone-800 text-base">Tahap 3: Panen & Pengelolaan Residu</h3>
+                    <p class="text-xs text-stone-500">Atur pengelolaan hasil panen rusak untuk menjaga ketersediaan humus tanah.</p>
                 </div>
 
-                <!-- Opsi Hasil Panen Rusak -->
                 <div class="space-y-3 mb-4">
                     <div class="p-3 bg-stone-50 rounded-lg border border-stone-200">
-                        <label class="font-bold text-xs text-stone-800 block mb-1">Pengelolaan Hasil Panen Rusak / Afkir:</label>
+                        <label class="font-bold text-xs text-stone-800 block mb-1">Pengelolaan Panen Rusak / Afkir:</label>
                         <div class="space-y-2 text-xs">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="radio" name="residu-option" value="humus" checked class="accent-emerald-600">
-                                <span><strong>Jadikan Kompos Humus Alami:</strong> Meningkatkan kesuburan tanah ($\beta \cdot R_{humus}$).</span>
+                                <span><strong>Jadikan Kompos Humus:</strong> Memulihkan kesuburan tanah ($\beta \cdot R_{humus}$).</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="radio" name="residu-option" value="sell" class="accent-emerald-600">
-                                <span><strong>Jual Diskon ke Pasar Murah:</strong> Mendapatkan uang tunai instan tambahan.</span>
+                                <span><strong>Jual Diskon ke Pasar:</strong> Tambahan uang tunai instan.</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-xs">
-                        <span class="font-bold text-emerald-900 block mb-1">Catatan Tanaman Konservasi (Orok-Orok):</span>
-                        <p class="text-emerald-800">Kapling yang ditanami <strong>Orok-Orok</strong> otomatis tidak dipanen komersial ($Y_{basis}=0$), melainkan ditinggalkan di lahan untuk pemulihan tanah maksimal ($+25$ poin kesuburan).</p>
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-xs text-emerald-800">
+                        <strong>Tanaman Konservasi (Orok-Orok):</strong> Otomatis ditinggalkan di lahan untuk pemulihan struktur tanah maksimal ($+25$ poin).
                     </div>
                 </div>
 
                 <div class="mt-auto">
                     <button id="btn-finish-harvest" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-lg shadow-md flex items-center justify-center gap-2 transition">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i> Eksekusi Panen & Tampilkan Laporan Musim
+                        <i data-lucide="check-circle" class="w-5 h-5"></i> Eksekusi Panen & Tampilkan Laporan
                     </button>
                 </div>
             </div>
 
         </section>
+
+        <!-- KANAN: Denah Lahan Pertanian Vertikal / Grid Kapling Utama (7 Kolom - Proporsi Lebih Besar) -->
+        <section class="lg:col-span-7 flex flex-col gap-3 order-1 lg:order-2">
+            <div class="bg-white p-5 rounded-xl shadow-md border border-stone-200 h-full flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="font-bold text-stone-800 flex items-center gap-2 text-base md:text-lg">
+                            <i data-lucide="map" class="text-emerald-600 w-6 h-6"></i>
+                            Denah Kapling Lahan (Grid 4x4)
+                        </h2>
+                        <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-bold border" id="season-badge">
+                            Musim ke-1
+                        </span>
+                    </div>
+
+                    <!-- Status Indikator Visual Berupa Bar & Angka -->
+                    <div class="grid grid-cols-3 gap-3 mb-4 text-xs">
+                        <!-- Indikator 1: Kesehatan Tanah -->
+                        <div class="bg-amber-50 p-2.5 rounded-lg border border-amber-200 flex flex-col justify-between">
+                            <div class="flex justify-between items-center text-amber-900 font-bold mb-1">
+                                <span class="flex items-center gap-1"><i data-lucide="layers" class="w-3.5 h-3.5 text-amber-700"></i> Tanah</span>
+                                <span id="soil-health-val" class="text-sm">100%</span>
+                            </div>
+                            <div class="w-full bg-amber-200 h-2.5 rounded-full overflow-hidden">
+                                <div id="soil-bar" class="bg-amber-600 h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Indikator 2: Air Bersih -->
+                        <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-200 flex flex-col justify-between">
+                            <div class="flex justify-between items-center text-blue-900 font-bold mb-1">
+                                <span class="flex items-center gap-1"><i data-lucide="droplet" class="w-3.5 h-3.5 text-blue-700"></i> Air</span>
+                                <span id="water-bank-val" class="text-sm">100/100</span>
+                            </div>
+                            <div class="w-full bg-blue-200 h-2.5 rounded-full overflow-hidden">
+                                <div id="water-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Indikator 3: Lebah / Penyerbuk -->
+                        <div class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200 flex flex-col justify-between">
+                            <div class="flex justify-between items-center text-emerald-900 font-bold mb-1">
+                                <span class="flex items-center gap-1"><i data-lucide="bug" class="w-3.5 h-3.5 text-emerald-700"></i> Lebah</span>
+                                <span id="bee-pop-val" class="text-sm">0 Indeks</span>
+                            </div>
+                            <div class="w-full bg-emerald-200 h-2.5 rounded-full overflow-hidden">
+                                <div id="bee-bar" class="bg-emerald-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Denah Grid Lahan Strimin (4x4 Large Layout) -->
+                    <div id="farm-grid" class="grid grid-cols-4 gap-3 bg-stone-800 p-4 rounded-xl border-4 border-stone-700 aspect-square shadow-2xl relative">
+                        <!-- Dynamic Tiles Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Legenda Status Lahan -->
+                <div class="mt-4 text-xs text-stone-500 flex justify-around items-center pt-2 border-t border-stone-100">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-800 border border-emerald-600"></span> Tanah Subur (>70%)</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-800 border border-amber-600"></span> Tanah Sedang</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-900 border border-red-700"></span> Tanah Kritis (<30%)</span>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- MODAL LAPORAN HASIL MUSIM (NUMERASI & EKOLOGI) -->
+    <!-- MODAL LAPORAN HASIL MUSIM -->
     <div id="report-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border-4 border-emerald-600 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-start border-b pb-3 mb-4">
@@ -317,7 +319,7 @@
                 </div>
             </div>
 
-            <!-- Analisis Formula Matematika yang Terjadi -->
+            <!-- Analisis Formula Matematika -->
             <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-xs space-y-2 mb-4">
                 <h4 class="font-bold text-stone-800 text-sm mb-1 border-b pb-1">Rincian Kalkulasi Numerasi:</h4>
                 <div class="flex justify-between">
@@ -407,7 +409,7 @@
                         <span class="text-base">${crop.icon}</span> ${crop.name}
                     </div>
                     <div class="text-[10px] text-stone-500 mt-1">
-                        <div>Air: ${crop.water} | Dampak: ${crop.soilImpact > 0 ? '+' : ''}${crop.soilImpact}</div>
+                        <div>Air: ${crop.water} | Tanah: ${crop.soilImpact > 0 ? '+' : ''}${crop.soilImpact}</div>
                         <div class="font-semibold text-emerald-700">Rp ${crop.price.toLocaleString()}</div>
                     </div>
                 `;
@@ -440,7 +442,7 @@
                 if (gameState.soilHealth > 70) bgSoilClass = 'bg-emerald-900';
                 else if (gameState.soilHealth < 30) bgSoilClass = 'bg-red-950';
 
-                tile.className = `soil-tile ${bgSoilClass} rounded border border-stone-600/50 flex flex-col items-center justify-center relative cursor-pointer hover:border-amber-400 transition select-none p-1`;
+                tile.className = `soil-tile ${bgSoilClass} rounded-lg border border-stone-600/50 flex flex-col items-center justify-center relative cursor-pointer hover:border-amber-400 transition select-none p-1 shadow-md`;
                 tile.onclick = () => handlePlotClick(index);
 
                 if (cropId) {
@@ -448,11 +450,11 @@
                     // Progress pertumbuhan tanaman berdasarkan timeline
                     const scale = 0.3 + (gameState.timelineProgress / 100) * 0.7;
                     tile.innerHTML = `
-                        <div class="crop-pop text-2xl" style="transform: scale(${scale})">${crop.icon}</div>
-                        <div class="text-[9px] font-bold text-stone-200 bg-stone-900/70 px-1 rounded truncate max-w-full mt-0.5">${crop.name}</div>
+                        <div class="crop-pop text-3xl sm:text-4xl" style="transform: scale(${scale})">${crop.icon}</div>
+                        <div class="text-[10px] font-bold text-stone-200 bg-stone-900/80 px-1.5 py-0.5 rounded truncate max-w-full mt-1">${crop.name}</div>
                     `;
                 } else {
-                    tile.innerHTML = `<span class="text-[10px] text-stone-500 font-mono">#${index + 1}</span>`;
+                    tile.innerHTML = `<span class="text-xs text-stone-500 font-mono">#${index + 1}</span>`;
                 }
 
                 gridContainer.appendChild(tile);
@@ -491,6 +493,8 @@
             } else {
                 warningEl.classList.add('hidden');
             }
+
+            updateUI();
         }
 
         // Event Listeners & Kontrol
@@ -583,7 +587,7 @@
                     // Update label fase
                     const stageLabel = document.getElementById('growth-stage-label');
                     if (gameState.timelineProgress < 30) stageLabel.innerText = 'Fase: Vegetatif (Tunas)';
-                    else if (gameState.timelineProgress < 70) stageLabel.innerText = 'Fase: Generatif (Bunga & Penyerbukan)';
+                    else if (gameState.timelineProgress < 70) stageLabel.innerText = 'Fase: Generatif (Bunga)';
                     else stageLabel.innerText = 'Fase: Pematangan Buah';
 
                     renderGrid();
@@ -600,17 +604,16 @@
         function setStep(stepNumber) {
             gameState.step = stepNumber;
 
-            // Navigasi Button Styling
             for (let i = 1; i <= 3; i++) {
                 const btn = document.getElementById(`step-btn-${i}`);
                 const panel = document.getElementById(`panel-step-${i}`);
 
                 if (i === stepNumber) {
-                    btn.className = 'step-btn bg-emerald-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition shadow-sm';
+                    btn.className = 'step-btn bg-emerald-600 text-white font-bold py-2 px-2 rounded-lg text-xs flex items-center justify-center gap-1 transition shadow-sm';
                     btn.removeAttribute('disabled');
                     panel.classList.remove('hidden');
                 } else {
-                    btn.className = 'step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed';
+                    btn.className = 'step-btn bg-stone-100 text-stone-400 font-bold py-2 px-2 rounded-lg text-xs flex items-center justify-center gap-1 transition opacity-60 cursor-not-allowed';
                     btn.setAttribute('disabled', 'true');
                     panel.classList.add('hidden');
                 }
@@ -642,8 +645,8 @@
             }
 
             // 2. Kontribusi Penyerbuk Lebah (L_t) & Booster Kimia (B_t)
-            const omega = 0.1; // koefisien lebah
-            const alpha = 0.2; // koefisien booster
+            const omega = 0.1;
+            const alpha = 0.2;
             const boosterBoost = 1 + (alpha * Math.sqrt(gameState.boosterDose));
             const beeBoost = 1 + (omega * totalBeeAttraction);
 
@@ -660,11 +663,11 @@
             let humusBonus = 0;
             if (gameState.residuHandling === 'humus') {
                 const beta = 0.5;
-                const rHumus = filledPlots.length * 2; // estimasi unit residu
+                const rHumus = filledPlots.length * 2;
                 humusBonus = beta * rHumus;
                 netSoilChange += humusBonus;
             } else {
-                seasonIncome += filledPlots.length * 2000; // Jual diskon
+                seasonIncome += filledPlots.length * 2000;
             }
 
             // 5. Degradasi Asam Pupuk Kimia (-delta * B_t^2)
@@ -683,12 +686,12 @@
             gameState.soilHealth = Math.round(newSoilHealth);
             gameState.totalMoney += Math.round(seasonIncome);
 
-            // Tampilkan Laporan Ke Modal
+            // Tampilkan Laporan
             document.getElementById('rpt-income').innerText = `Rp ${Math.round(seasonIncome).toLocaleString()}`;
             document.getElementById('rpt-soil').innerText = `${Math.round(newSoilHealth)}%`;
             document.getElementById('rpt-o2').innerText = `${Math.round(totalO2Yield)} Unit`;
             document.getElementById('rpt-bee').innerText = `${totalBeeAttraction}`;
-            document.getElementById('rpt-lambda').innerText = `${lambda.toFixed(2)} ${lambda < 1.0 ? '(Krisis Air)' : '(Sangat Baik)'}`;
+            document.getElementById('rpt-lambda').innerText = `${lambda.toFixed(2)} ${lambda < 1.0 ? '(Krisis Air)' : '(Optimal)'}`;
             document.getElementById('rpt-booster-impact').innerText = `+${Math.round((boosterBoost - 1) * 100)}% Panen / -${chemicalDegradation.toFixed(1)} Kesuburan`;
             document.getElementById('rpt-humus-impact').innerText = `+${humusBonus.toFixed(1)} Poin Kesuburan`;
             document.getElementById('rpt-total-score').innerText = `${totalScore.toLocaleString()} Poin`;
@@ -696,14 +699,32 @@
             document.getElementById('report-modal').classList.remove('hidden');
         }
 
-        // Update UI Header & Indicators
+        // Update UI Header & Indikator Progress Bar Visual
         function updateUI() {
             document.getElementById('season-badge').innerText = `Musim ke-${gameState.season}`;
-            document.getElementById('soil-health-val').innerText = `${Math.round(gameState.soilHealth)}%`;
-            document.getElementById('water-bank-val').innerText = `${gameState.waterStock}/${gameState.waterStock}`;
             
-            const totalBee = gameState.plots.filter(p => p !== null).reduce((sum, cropId) => sum + MASTER_CROPS[cropId].bee, 0);
+            // Indikator Kesehatan Tanah
+            const soilVal = Math.round(gameState.soilHealth);
+            document.getElementById('soil-health-val').innerText = `${soilVal}%`;
+            document.getElementById('soil-bar').style.width = `${soilVal}%`;
+
+            // Indikator Air Bersih
+            const filledPlots = gameState.plots.filter(p => p !== null);
+            let waterUsed = 0;
+            filledPlots.forEach(cropId => waterUsed += MASTER_CROPS[cropId].water);
+            const waterRemaining = Math.max(0, gameState.waterStock - waterUsed);
+            const waterPercent = Math.round((waterRemaining / gameState.waterStock) * 100);
+            
+            document.getElementById('water-bank-val').innerText = `${waterRemaining}/${gameState.waterStock}`;
+            document.getElementById('water-bar').style.width = `${waterPercent}%`;
+
+            // Indikator Lebah / Penyerbuk
+            const totalBee = filledPlots.reduce((sum, cropId) => sum + MASTER_CROPS[cropId].bee, 0);
+            const maxBeeScale = 40; // Skala maksimal untuk persentase bar lebah
+            const beePercent = Math.min(100, Math.round((totalBee / maxBeeScale) * 100));
+            
             document.getElementById('bee-pop-val').innerText = `${totalBee}`;
+            document.getElementById('bee-bar').style.width = `${beePercent}%`;
         }
     </script>
 </body>
