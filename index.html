@@ -1,86 +1,710 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Petani Bijaksana - Gim Edutainment Numerasi</title>
-  <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0fdf4; color: #166534; margin: 0; padding: 20px; }
-    .container { max-width: 950px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-    h1 { text-align: center; color: #15803d; margin-bottom: 20px; font-size: 2.2em; }
-    
-    .status-hud { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #dcfce7; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; }
-    .status-card { background: #ffffff; padding: 10px; border-radius: 8px; border: 1px solid #bbf7d0; }
-    .status-card span { display: block; font-size: 1.2em; color: #16a34a; }
-    
-    .farm-section { text-align: center; }
-    .grid-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0; }
-    .tile { background: #fef3c7; border: 2px dashed #d97706; border-radius: 10px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .tile:hover { background: #fde68a; transform: translateY(-2px); }
-    .tile.planted { background: #dcfce7; border: 2px solid #16a34a; }
-    .tile-icon { font-size: 1.5em; }
-    .tile-add { font-size: 1.5em; color: #d97706; }
-
-    .control-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; background: #f8fafc; padding: 15px; border-radius: 10px; }
-    .control-group label { font-weight: bold; display: block; margin-bottom: 5px; }
-    .control-group input { width: 80%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
-
-    .btn-simulasi { width: 100%; background: #16a34a; color: white; border: none; padding: 15px; font-size: 1.1em; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 20px; }
-    .btn-simulasi:hover { background: #15803d; }
-
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; }
-    .modal-content { background: white; padding: 20px; border-radius: 12px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
-    .crop-option { padding: 10px; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
-    .crop-option:hover { background: #f1f5f9; }
-
-    #log-area { margin-top: 25px; }
-    .log-entry { background: #1e293b; color: #f8fafc; padding: 12px; border-radius: 8px; font-family: monospace; margin-bottom: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taman Numerasi: Sustainable Farming</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .soil-tile {
+            transition: all 0.3s ease;
+        }
+        .crop-pop {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .bee-fly {
+            animation: fly 3s infinite ease-in-out;
+        }
+        @keyframes fly {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, -8px) rotate(10deg); }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen flex flex-col">
 
-<div class="container">
-  <h1>👨‍🌾 Petani Bijaksana</h1>
+    <!-- Header Banner dengan Logo BBGP DIY & Maskot Si Yo -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-500">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+            
+            <!-- Sisi Kiri: Logo BBGTK / BBGP DIY -->
+            <div class="flex items-center gap-3 shrink-0">
+                <img src="bbgtk diy logo.png" 
+                     alt="Logo BBGTK DIY" 
+                     class="h-12 md:h-16 w-auto object-contain drop-shadow-md bg-white/10 p-1 rounded"
+                     onerror="this.onerror=null; this.src='https://placehold.co/120x60/10b981/ffffff?text=BBGTK+DIY';">
+            </div>
 
-  <div class="status-hud">
-    <div class="status-card">Musim Tanam<span id="lbl-season">1</span></div>
-    <div class="status-card">Kesehatan Tanah<span id="lbl-soil">100%</span></div>
-    <div class="status-card">Estimasi Air<span id="preview-water">0 / 100</span></div>
-    <div class="status-card">Kas Uang<span id="lbl-money">Rp 0</span></div>
-  </div>
+            <!-- Bagian Tengah: Judul Game & Subtitle -->
+            <div class="text-center flex-1 my-auto">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="bg-amber-500 text-stone-900 text-xs font-black px-2 py-0.5 rounded tracking-wide uppercase">Taman Numerasi</span>
+                    <h1 class="text-xl md:text-2xl font-black tracking-wide text-amber-300 drop-shadow">SUSTAINABLE FARMING</h1>
+                </div>
+                <p class="text-xs md:text-sm text-emerald-100 font-medium hidden sm:block mt-0.5">
+                    Gim Edutainment Simulasi Pertanian Berkelanjutan & Model Matematika Lingkungan
+                </p>
+            </div>
 
-  <div class="farm-section">
-    <h3>Petak Lahan Pertanian (Klik Petak untuk Menanam)</h3>
-    <div class="grid-container" id="farm-grid"></div>
-  </div>
+            <!-- Sisi Kanan: Maskot Si Yo -->
+            <div class="flex items-center gap-2 shrink-0 bg-emerald-900/60 p-1.5 rounded-lg border border-emerald-600/50">
+                <img src="maskot-siyo.png" 
+                     alt="Maskot Si Yo" 
+                     class="h-12 md:h-16 w-auto object-contain drop-shadow-md"
+                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/f59e0b/ffffff?text=Si+Yo';">
+                <div class="hidden lg:block text-right pr-1">
+                    <div class="text-xs font-bold text-amber-300">Si Yo</div>
+                    <div class="text-[10px] text-emerald-200 leading-tight">Maskot Taman<br>Numerasi</div>
+                </div>
+            </div>
 
-  <div class="control-panel">
-    <div class="control-group">
-      <label>Buah Rusak Ditinggal (Humus Alami):</label>
-      <input type="number" id="inp-humus" value="0" min="0"> Unit
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+
+        <!-- KIRI: Denah Lahan Pertanian Vertikal (Grid Kapling) -->
+        <section class="lg:col-span-5 flex flex-col gap-3">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-stone-200">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="font-bold text-stone-700 flex items-center gap-2 text-sm md:text-base">
+                        <i data-lucide="map" class="text-emerald-600 w-5 h-5"></i>
+                        Denah Kapling Lahan (Grid 4x4)
+                    </h2>
+                    <span class="text-xs bg-stone-100 text-stone-600 px-2 py-1 rounded font-semibold border" id="season-badge">
+                        Musim ke-1
+                    </span>
+                </div>
+
+                <!-- Status Lingkungan Lahan -->
+                <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
+                    <div class="bg-amber-50 p-2 rounded border border-amber-200">
+                        <div class="text-amber-800 font-medium flex items-center gap-1">
+                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Kesehatan Tanah
+                        </div>
+                        <div class="text-lg font-black text-amber-900" id="soil-health-val">100%</div>
+                    </div>
+                    <div class="bg-blue-50 p-2 rounded border border-blue-200">
+                        <div class="text-blue-800 font-medium flex items-center gap-1">
+                            <i data-lucide="droplet" class="w-3.5 h-3.5"></i> Air Bersih
+                        </div>
+                        <div class="text-lg font-black text-blue-900" id="water-bank-val">100/100</div>
+                    </div>
+                    <div class="bg-emerald-50 p-2 rounded border border-emerald-200">
+                        <div class="text-emerald-800 font-medium flex items-center gap-1">
+                            <i data-lucide="bug" class="w-3.5 h-3.5"></i> Lebah/Penyerbuk
+                        </div>
+                        <div class="text-lg font-black text-emerald-900" id="bee-pop-val">0</div>
+                    </div>
+                </div>
+
+                <!-- Grid Strimin Kapling (4x4 Top-Down / Landscape Vertikal) -->
+                <div id="farm-grid" class="grid grid-cols-4 gap-2 bg-stone-800 p-3 rounded-lg border-2 border-stone-700 aspect-square shadow-inner relative">
+                    <!-- Dynamic Tiles Generated by JS -->
+                </div>
+
+                <div class="mt-2 text-[11px] text-stone-500 flex justify-between items-center px-1">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Tanah Subur (>70%)</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Tanah Sedang</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> Tanah Rusak (<30%)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- KANAN: Panel Kontrol Tahapan & Manajemen -->
+        <section class="lg:col-span-7 flex flex-col gap-4">
+
+            <!-- Stepper Navigasi Tahapan -->
+            <div class="bg-white p-2.5 rounded-xl shadow-md border border-stone-200 grid grid-cols-3 gap-2">
+                <button id="step-btn-1" class="step-btn active bg-emerald-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition">
+                    <span class="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-xs">1</span>
+                    Perencanaan
+                </button>
+                <button id="step-btn-2" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed" disabled>
+                    <span class="w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-xs">2</span>
+                    Pemeliharaan
+                </button>
+                <button id="step-btn-3" class="step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed" disabled>
+                    <span class="w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-xs">3</span>
+                    Panen & Residu
+                </button>
+            </div>
+
+            <!-- TAHAP 1: PERENCANAAN -->
+            <div id="panel-step-1" class="bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
+                <div class="border-b pb-2 mb-3 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-stone-800 text-base">Tahap 1: Perencanaan Alokasi Lahan</h3>
+                        <p class="text-xs text-stone-500">Pilih jenis tanaman lalu klik pada kapling lahan di sebelah kiri.</p>
+                    </div>
+                </div>
+
+                <!-- Pilihan Tanaman (Master Crops) -->
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Pilih Tanaman untuk Ditanam:</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="crop-selector">
+                        <!-- Generated dynamically by JS -->
+                    </div>
+                </div>
+
+                <!-- Info Kalkulasi Kebutuhan Air vs Lahan -->
+                <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 mb-4 text-xs space-y-2">
+                    <div class="flex justify-between font-semibold text-stone-700">
+                        <span>Total Kapling Terisi:</span>
+                        <span id="allocated-plots-text">0 / 16 Petak</span>
+                    </div>
+                    <div class="flex justify-between font-semibold text-stone-700">
+                        <span>Estimasi Konsumsi Air ($W_{butuh}$):</span>
+                        <span id="water-req-text" class="text-blue-600">0 unit</span>
+                    </div>
+                    <div id="water-warning" class="hidden text-red-600 font-bold bg-red-50 p-1.5 rounded border border-red-200 flex items-center gap-1">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                        Peringatan: Kebutuhan air melebihi stok air! Akan memicu krisis air ($\lambda_t$).
+                    </div>
+                </div>
+
+                <div class="mt-auto flex justify-between gap-2">
+                    <button id="btn-clear-plan" class="px-3 py-2 bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold rounded-lg transition">
+                        Reset Plan
+                    </button>
+                    <button id="btn-start-planting" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-lg shadow-md flex items-center gap-2 transition">
+                        <i data-lucide="sprout" class="w-4 h-4"></i> Mulai Tanam & Ke Pemeliharaan
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAHAP 2: PEMELIHARAAN -->
+            <div id="panel-step-2" class="hidden bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
+                <div class="border-b pb-2 mb-3">
+                    <h3 class="font-bold text-stone-800 text-base">Tahap 2: Pemeliharaan & Pertumbuhan</h3>
+                    <p class="text-xs text-stone-500">Pantau pertumbuhan tanaman. Anda dapat menjeda waktu untuk memberikan pupuk booster.</p>
+                </div>
+
+                <!-- Timeline Bar / Garis Waktu -->
+                <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 mb-4">
+                    <div class="flex justify-between items-center text-xs font-bold text-stone-700 mb-1">
+                        <span>Garis Waktu Pertumbuhan Musim Tanam</span>
+                        <span id="timeline-text">0 / 100 Hari</span>
+                    </div>
+                    <div class="w-full bg-stone-200 h-4 rounded-full overflow-hidden p-0.5 border">
+                        <div id="timeline-progress" class="bg-emerald-500 h-full rounded-full transition-all duration-200" style="width: 0%"></div>
+                    </div>
+                    
+                    <!-- Time Controls -->
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="flex gap-2">
+                            <button id="btn-pause-toggle" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded flex items-center gap-1 transition">
+                                <i data-lucide="pause" class="w-3.5 h-3.5" id="pause-icon"></i>
+                                <span id="pause-btn-text">Pause Waktu</span>
+                            </button>
+                        </div>
+                        <div class="text-xs text-stone-500 font-semibold" id="growth-stage-label">
+                            Fase: Generatif Awal
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Booster Kimia -->
+                <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 mb-4">
+                    <h4 class="font-bold text-amber-900 text-xs mb-1 flex items-center gap-1">
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-600"></i> Berikan Booster Pupuk Kimia Non-Organik ($B_t$)
+                    </h4>
+                    <p class="text-[11px] text-amber-800 mb-2">Mendongkrak panen secara instan, tetapi menyisakan residu kimia yang merusak kesehatan tanah ($-\delta \cdot B_t^2$).</p>
+                    
+                    <div class="flex items-center gap-3">
+                        <input type="range" id="booster-slider" min="0" max="10" value="0" class="flex-1 accent-amber-600">
+                        <span id="booster-val-text" class="font-black text-amber-900 text-sm bg-white px-2 py-1 rounded border border-amber-300">0 Dosis</span>
+                    </div>
+                </div>
+
+                <div class="mt-auto flex justify-end">
+                    <button id="btn-skip-maintenance" class="px-4 py-2 bg-stone-700 hover:bg-stone-800 text-white font-bold text-xs rounded-lg flex items-center gap-1 transition">
+                        Percepat ke Akhir Musim <i data-lucide="fast-forward" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAHAP 3: PANEN & RESIDU -->
+            <div id="panel-step-3" class="hidden bg-white p-4 rounded-xl shadow-md border border-stone-200 flex-1 flex flex-col">
+                <div class="border-b pb-2 mb-3">
+                    <h3 class="font-bold text-stone-800 text-base">Tahap 3: Perencanaan Panen & Kelola Residu Organik</h3>
+                    <p class="text-xs text-stone-500">Tentukan penanganan hasil panen rusak dan sisa tanaman untuk menjaga humus tanah.</p>
+                </div>
+
+                <!-- Opsi Hasil Panen Rusak -->
+                <div class="space-y-3 mb-4">
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200">
+                        <label class="font-bold text-xs text-stone-800 block mb-1">Pengelolaan Hasil Panen Rusak / Afkir:</label>
+                        <div class="space-y-2 text-xs">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="residu-option" value="humus" checked class="accent-emerald-600">
+                                <span><strong>Jadikan Kompos Humus Alami:</strong> Meningkatkan kesuburan tanah ($\beta \cdot R_{humus}$).</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="residu-option" value="sell" class="accent-emerald-600">
+                                <span><strong>Jual Diskon ke Pasar Murah:</strong> Mendapatkan uang tunai instan tambahan.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-xs">
+                        <span class="font-bold text-emerald-900 block mb-1">Catatan Tanaman Konservasi (Orok-Orok):</span>
+                        <p class="text-emerald-800">Kapling yang ditanami <strong>Orok-Orok</strong> otomatis tidak dipanen komersial ($Y_{basis}=0$), melainkan ditinggalkan di lahan untuk pemulihan tanah maksimal ($+25$ poin kesuburan).</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto">
+                    <button id="btn-finish-harvest" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-lg shadow-md flex items-center justify-center gap-2 transition">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i> Eksekusi Panen & Tampilkan Laporan Musim
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- MODAL LAPORAN HASIL MUSIM (NUMERASI & EKOLOGI) -->
+    <div id="report-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border-4 border-emerald-600 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-start border-b pb-3 mb-4">
+                <div>
+                    <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Laporan Evaluasi Musim</span>
+                    <h2 class="text-2xl font-black text-stone-800">Capaian Keuangan & Ekologi</h2>
+                </div>
+                <button id="btn-close-modal" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Ringkasan Rincian Skor -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-center">
+                    <div class="text-[11px] font-bold text-emerald-700 uppercase">Pendapatan Uang</div>
+                    <div class="text-lg font-black text-emerald-900" id="rpt-income">Rp 0</div>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-center">
+                    <div class="text-[11px] font-bold text-amber-700 uppercase">Kesehatan Tanah Baru</div>
+                    <div class="text-lg font-black text-amber-900" id="rpt-soil">0%</div>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-center">
+                    <div class="text-[11px] font-bold text-blue-700 uppercase">Produksi O2</div>
+                    <div class="text-lg font-black text-blue-900" id="rpt-o2">0 Unit</div>
+                </div>
+                <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 text-center">
+                    <div class="text-[11px] font-bold text-purple-700 uppercase">Indeks Penyerbuk</div>
+                    <div class="text-lg font-black text-purple-900" id="rpt-bee">0</div>
+                </div>
+            </div>
+
+            <!-- Analisis Formula Matematika yang Terjadi -->
+            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-xs space-y-2 mb-4">
+                <h4 class="font-bold text-stone-800 text-sm mb-1 border-b pb-1">Rincian Kalkulasi Numerasi:</h4>
+                <div class="flex justify-between">
+                    <span>Faktor Krisis Air ($\lambda_t$):</span>
+                    <span id="rpt-lambda" class="font-bold">1.0 (Optimal)</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Pengaruh Booster Kimia ($B_t$):</span>
+                    <span id="rpt-booster-impact" class="font-bold">0% Boost / -0 Degradasi</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Tambahan Humus Residu ($\beta \cdot R_{humus}$):</span>
+                    <span id="rpt-humus-impact" class="font-bold text-emerald-600">+0 Poin Kesuburan</span>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl mb-6 flex items-center justify-between">
+                <div>
+                    <div class="text-xs text-amber-800 font-bold">TOTAL SKOR KINERJA BERKELANJUTAN</div>
+                    <div class="text-2xl font-black text-amber-900" id="rpt-total-score">0 Poin</div>
+                </div>
+                <i data-lucide="award" class="w-10 h-10 text-amber-500"></i>
+            </div>
+
+            <div class="flex gap-3">
+                <button id="btn-next-season" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                    Lanjut ke Musim Berikutnya <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="control-group">
-      <label>Booster Kimia (Sintetis):</label>
-      <input type="number" id="inp-booster" value="0" min="0"> Dosis
-    </div>
-  </div>
 
-  <button class="btn-simulasi" onclick="runSeasonSimulation()">Proses Musim Panen ➔</button>
+    <!-- SCRIPT LOGIKA SIMULASI GIM -->
+    <script>
+        // Master Data Tanaman Sesuai Naskah Dokumen JSON
+        const MASTER_CROPS = {
+            jagung: { id: 'jagung', name: 'Jagung', category: 'Karbohidrat', water: 10, soilImpact: -15, bee: 1, o2: 3, yield: 20, price: 5000, icon: '🌽' },
+            sorgum: { id: 'sorgum', name: 'Sorgum', category: 'Karbohidrat', water: 3, soilImpact: 2, bee: 1, o2: 3, yield: 12, price: 6000, icon: '🌾' },
+            jeruk: { id: 'jeruk', name: 'Jeruk', category: 'Buah', water: 8, soilImpact: -8, bee: 8, o2: 4, yield: 15, price: 12000, icon: '🍊' },
+            buah_naga: { id: 'buah_naga', name: 'Buah Naga', category: 'Buah', water: 2, soilImpact: -3, bee: 5, o2: 2, yield: 10, price: 15000, icon: '🌵' },
+            bayam: { id: 'bayam', name: 'Bayam', category: 'Sayuran', water: 7, soilImpact: -4, bee: 0, o2: 8, yield: 25, price: 3000, icon: '🥬' },
+            kelor: { id: 'kelor', name: 'Kelor', category: 'Sayuran', water: 3, soilImpact: 1, bee: 2, o2: 6, yield: 15, price: 4000, icon: '🌿' },
+            kacang_tanah: { id: 'kacang_tanah', name: 'Kacang Tanah', category: 'Legum', water: 5, soilImpact: 10, bee: 3, o2: 3, yield: 8, price: 8000, icon: '🥜' },
+            orok_orok: { id: 'orok_orok', name: 'Orok-Orok', category: 'Legum/Konservasi', water: 2, soilImpact: 25, bee: 4, o2: 4, yield: 0, price: 0, icon: '🌱' }
+        };
 
-  <div id="log-area">
-    <h3>Catatan Evaluasi Petani Bijaksana</h3>
-    <div id="log-content"></div>
-  </div>
-</div>
+        // State Utama Permainan
+        let gameState = {
+            season: 1,
+            step: 1, // 1: Perencanaan, 2: Pemeliharaan, 3: Panen
+            soilHealth: 100, // H_t (0 - 100%)
+            waterStock: 100, // W_stok
+            totalMoney: 0,
+            plots: Array(16).fill(null), // 16 Kapling lahan
+            selectedCropId: 'jagung',
+            
+            // Variabel Musim Berjalan
+            timelineProgress: 0, // 0 - 100%
+            isPaused: false,
+            boosterDose: 0, // B_t
+            residuHandling: 'humus', // 'humus' or 'sell'
+            timerInterval: null
+        };
 
-<div class="modal-overlay" id="crop-modal">
-  <div class="modal-content">
-    <h3>Pilih Tanaman untuk Petak Ini</h3>
-    <div id="modal-crop-list"></div>
-    <button onclick="closeModal()" style="margin-top:15px; padding:8px 16px;">Batal</button>
-  </div>
-</div>
+        // Inisialisasi Aplikasi
+        document.addEventListener('DOMContentLoaded', () => {
+            initCropSelector();
+            renderGrid();
+            updateUI();
+            setupEventListeners();
+            lucide.createIcons();
+        });
 
-<script src="engine.js"></script>
+        // Initialize Selection Button Tanaman
+        function initCropSelector() {
+            const container = document.getElementById('crop-selector');
+            container.innerHTML = '';
+
+            Object.values(MASTER_CROPS).forEach(crop => {
+                const btn = document.createElement('button');
+                btn.className = `crop-select-btn text-left p-2 rounded-lg border text-xs flex flex-col justify-between transition ${crop.id === gameState.selectedCropId ? 'border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500' : 'border-stone-200 hover:bg-stone-50'}`;
+                btn.onclick = () => selectCrop(crop.id);
+                btn.id = `crop-btn-${crop.id}`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-1 font-bold text-stone-800">
+                        <span class="text-base">${crop.icon}</span> ${crop.name}
+                    </div>
+                    <div class="text-[10px] text-stone-500 mt-1">
+                        <div>Air: ${crop.water} | Dampak: ${crop.soilImpact > 0 ? '+' : ''}${crop.soilImpact}</div>
+                        <div class="font-semibold text-emerald-700">Rp ${crop.price.toLocaleString()}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCrop(cropId) {
+            gameState.selectedCropId = cropId;
+            document.querySelectorAll('.crop-select-btn').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'bg-emerald-50', 'ring-2', 'ring-emerald-500');
+                btn.classList.add('border-stone-200');
+            });
+            const activeBtn = document.getElementById(`crop-btn-${cropId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-emerald-600', 'bg-emerald-50', 'ring-2', 'ring-emerald-500');
+            }
+        }
+
+        // Render Strimin Grid Lahan Pertanian (4x4)
+        function renderGrid() {
+            const gridContainer = document.getElementById('farm-grid');
+            gridContainer.innerHTML = '';
+
+            gameState.plots.forEach((cropId, index) => {
+                const tile = document.createElement('div');
+                
+                // Warna dasar berdasarkan kesehatan tanah
+                let bgSoilClass = 'bg-amber-800';
+                if (gameState.soilHealth > 70) bgSoilClass = 'bg-emerald-900';
+                else if (gameState.soilHealth < 30) bgSoilClass = 'bg-red-950';
+
+                tile.className = `soil-tile ${bgSoilClass} rounded border border-stone-600/50 flex flex-col items-center justify-center relative cursor-pointer hover:border-amber-400 transition select-none p-1`;
+                tile.onclick = () => handlePlotClick(index);
+
+                if (cropId) {
+                    const crop = MASTER_CROPS[cropId];
+                    // Progress pertumbuhan tanaman berdasarkan timeline
+                    const scale = 0.3 + (gameState.timelineProgress / 100) * 0.7;
+                    tile.innerHTML = `
+                        <div class="crop-pop text-2xl" style="transform: scale(${scale})">${crop.icon}</div>
+                        <div class="text-[9px] font-bold text-stone-200 bg-stone-900/70 px-1 rounded truncate max-w-full mt-0.5">${crop.name}</div>
+                    `;
+                } else {
+                    tile.innerHTML = `<span class="text-[10px] text-stone-500 font-mono">#${index + 1}</span>`;
+                }
+
+                gridContainer.appendChild(tile);
+            });
+        }
+
+        // Handle Click pada Kapling
+        function handlePlotClick(index) {
+            if (gameState.step !== 1) return; // Klik hanya aktif pada Tahap Perencanaan
+
+            if (gameState.plots[index] === gameState.selectedCropId) {
+                gameState.plots[index] = null; // Toggle hapus
+            } else {
+                gameState.plots[index] = gameState.selectedCropId; // Pasang tanaman
+            }
+
+            renderGrid();
+            updatePlanCalculation();
+        }
+
+        // Update Kalkulasi Tahap Perencanaan
+        function updatePlanCalculation() {
+            const filledPlots = gameState.plots.filter(p => p !== null);
+            let totalWaterNeeded = 0;
+
+            filledPlots.forEach(cropId => {
+                totalWaterNeeded += MASTER_CROPS[cropId].water;
+            });
+
+            document.getElementById('allocated-plots-text').innerText = `${filledPlots.length} / 16 Petak`;
+            document.getElementById('water-req-text').innerText = `${totalWaterNeeded} / ${gameState.waterStock} unit`;
+
+            const warningEl = document.getElementById('water-warning');
+            if (totalWaterNeeded > gameState.waterStock) {
+                warningEl.classList.remove('hidden');
+            } else {
+                warningEl.classList.add('hidden');
+            }
+        }
+
+        // Event Listeners & Kontrol
+        function setupEventListeners() {
+            // Button Reset Plan
+            document.getElementById('btn-clear-plan').onclick = () => {
+                gameState.plots = Array(16).fill(null);
+                renderGrid();
+                updatePlanCalculation();
+            };
+
+            // Button Mulai Tanam (Step 1 -> Step 2)
+            document.getElementById('btn-start-planting').onclick = () => {
+                const filledPlots = gameState.plots.filter(p => p !== null);
+                if (filledPlots.length === 0) {
+                    alert('Pilih setidaknya satu kapling tanah untuk ditanami!');
+                    return;
+                }
+                setStep(2);
+                startTimelineTimer();
+            };
+
+            // Toggle Pause Waktu
+            document.getElementById('btn-pause-toggle').onclick = () => {
+                gameState.isPaused = !gameState.isPaused;
+                document.getElementById('pause-btn-text').innerText = gameState.isPaused ? 'Lanjutkan Waktu' : 'Pause Waktu';
+                document.getElementById('pause-icon').setAttribute('data-lucide', gameState.isPaused ? 'play' : 'pause');
+                lucide.createIcons();
+            };
+
+            // Slider Booster Kimia
+            document.getElementById('booster-slider').oninput = (e) => {
+                gameState.boosterDose = parseInt(e.target.value);
+                document.getElementById('booster-val-text').innerText = `${gameState.boosterDose} Dosis`;
+            };
+
+            // Button Skip Maintenance (Step 2 -> Step 3)
+            document.getElementById('btn-skip-maintenance').onclick = () => {
+                clearInterval(gameState.timerInterval);
+                gameState.timelineProgress = 100;
+                document.getElementById('timeline-progress').style.width = '100%';
+                renderGrid();
+                setStep(3);
+            };
+
+            // Radio Button Residu
+            document.querySelectorAll('input[name="residu-option"]').forEach(radio => {
+                radio.onchange = (e) => {
+                    gameState.residuHandling = e.target.value;
+                };
+            });
+
+            // Button Finish Harvest (Step 3 -> Report)
+            document.getElementById('btn-finish-harvest').onclick = () => {
+                calculateFinalSeasonResults();
+            };
+
+            // Button Next Season
+            document.getElementById('btn-next-season').onclick = () => {
+                document.getElementById('report-modal').classList.add('hidden');
+                gameState.season++;
+                gameState.plots = Array(16).fill(null);
+                gameState.timelineProgress = 0;
+                gameState.boosterDose = 0;
+                document.getElementById('booster-slider').value = 0;
+                document.getElementById('booster-val-text').innerText = '0 Dosis';
+                setStep(1);
+                updateUI();
+                renderGrid();
+                updatePlanCalculation();
+            };
+
+            document.getElementById('btn-close-modal').onclick = () => {
+                document.getElementById('report-modal').classList.add('hidden');
+            };
+        }
+
+        // Pengatur Garis Waktu Pertumbuhan (Timeline Timer)
+        function startTimelineTimer() {
+            gameState.timelineProgress = 0;
+            gameState.isPaused = false;
+            clearInterval(gameState.timerInterval);
+
+            gameState.timerInterval = setInterval(() => {
+                if (!gameState.isPaused) {
+                    gameState.timelineProgress += 2;
+                    document.getElementById('timeline-progress').style.width = `${gameState.timelineProgress}%`;
+                    document.getElementById('timeline-text').innerText = `${Math.floor(gameState.timelineProgress)} / 100 Hari`;
+
+                    // Update label fase
+                    const stageLabel = document.getElementById('growth-stage-label');
+                    if (gameState.timelineProgress < 30) stageLabel.innerText = 'Fase: Vegetatif (Tunas)';
+                    else if (gameState.timelineProgress < 70) stageLabel.innerText = 'Fase: Generatif (Bunga & Penyerbukan)';
+                    else stageLabel.innerText = 'Fase: Pematangan Buah';
+
+                    renderGrid();
+
+                    if (gameState.timelineProgress >= 100) {
+                        clearInterval(gameState.timerInterval);
+                        setStep(3);
+                    }
+                }
+            }, 150);
+        }
+
+        // Ganti Step/Tahapan
+        function setStep(stepNumber) {
+            gameState.step = stepNumber;
+
+            // Navigasi Button Styling
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                const panel = document.getElementById(`panel-step-${i}`);
+
+                if (i === stepNumber) {
+                    btn.className = 'step-btn bg-emerald-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition shadow-sm';
+                    btn.removeAttribute('disabled');
+                    panel.classList.remove('hidden');
+                } else {
+                    btn.className = 'step-btn bg-stone-100 text-stone-400 font-bold py-2 px-3 rounded-lg text-xs md:text-sm flex items-center justify-center gap-1.5 transition opacity-60 cursor-not-allowed';
+                    btn.setAttribute('disabled', 'true');
+                    panel.classList.add('hidden');
+                }
+            }
+        }
+
+        // Kalkulasi Hasil Matematika Sesuai Formulasi Naskah
+        function calculateFinalSeasonResults() {
+            let totalWaterNeeded = 0;
+            let totalBeeAttraction = 0;
+            let totalO2Yield = 0;
+            let netSoilChange = 0;
+            let seasonIncome = 0;
+
+            const filledPlots = gameState.plots.filter(p => p !== null);
+
+            filledPlots.forEach(cropId => {
+                const crop = MASTER_CROPS[cropId];
+                totalWaterNeeded += crop.water;
+                totalBeeAttraction += crop.bee;
+                totalO2Yield += crop.o2 * (gameState.soilHealth / 100);
+                netSoilChange += crop.soilImpact;
+            });
+
+            // 1. Faktor Kelangkaan Air (lambda_t)
+            let lambda = 1.0;
+            if (totalWaterNeeded > gameState.waterStock) {
+                lambda = gameState.waterStock / totalWaterNeeded;
+            }
+
+            // 2. Kontribusi Penyerbuk Lebah (L_t) & Booster Kimia (B_t)
+            const omega = 0.1; // koefisien lebah
+            const alpha = 0.2; // koefisien booster
+            const boosterBoost = 1 + (alpha * Math.sqrt(gameState.boosterDose));
+            const beeBoost = 1 + (omega * totalBeeAttraction);
+
+            // 3. Kalkulasi Hasil Panen Komersial (Y_i,t)
+            filledPlots.forEach(cropId => {
+                const crop = MASTER_CROPS[cropId];
+                if (crop.yield > 0) {
+                    const plotYield = crop.yield * (gameState.soilHealth / 100) * lambda * beeBoost * boosterBoost;
+                    seasonIncome += plotYield * crop.price;
+                }
+            });
+
+            // 4. Dampak Residu Humus vs Penjualan
+            let humusBonus = 0;
+            if (gameState.residuHandling === 'humus') {
+                const beta = 0.5;
+                const rHumus = filledPlots.length * 2; // estimasi unit residu
+                humusBonus = beta * rHumus;
+                netSoilChange += humusBonus;
+            } else {
+                seasonIncome += filledPlots.length * 2000; // Jual diskon
+            }
+
+            // 5. Degradasi Asam Pupuk Kimia (-delta * B_t^2)
+            const delta = 0.05;
+            const chemicalDegradation = delta * Math.pow(gameState.boosterDose, 2);
+            netSoilChange -= chemicalDegradation;
+
+            // 6. Transisi Kesehatan Tanah Baru (H_t+1)
+            const newSoilHealth = Math.min(100, Math.max(0, gameState.soilHealth + netSoilChange));
+
+            // 7. Total Skor Kinerja Berkelanjutan
+            const w1 = 100, w2 = 500, w3 = 200;
+            const totalScore = Math.round(seasonIncome + (w1 * totalO2Yield) + (w2 * totalBeeAttraction) + (w3 * newSoilHealth));
+
+            // Update State Utama
+            gameState.soilHealth = Math.round(newSoilHealth);
+            gameState.totalMoney += Math.round(seasonIncome);
+
+            // Tampilkan Laporan Ke Modal
+            document.getElementById('rpt-income').innerText = `Rp ${Math.round(seasonIncome).toLocaleString()}`;
+            document.getElementById('rpt-soil').innerText = `${Math.round(newSoilHealth)}%`;
+            document.getElementById('rpt-o2').innerText = `${Math.round(totalO2Yield)} Unit`;
+            document.getElementById('rpt-bee').innerText = `${totalBeeAttraction}`;
+            document.getElementById('rpt-lambda').innerText = `${lambda.toFixed(2)} ${lambda < 1.0 ? '(Krisis Air)' : '(Sangat Baik)'}`;
+            document.getElementById('rpt-booster-impact').innerText = `+${Math.round((boosterBoost - 1) * 100)}% Panen / -${chemicalDegradation.toFixed(1)} Kesuburan`;
+            document.getElementById('rpt-humus-impact').innerText = `+${humusBonus.toFixed(1)} Poin Kesuburan`;
+            document.getElementById('rpt-total-score').innerText = `${totalScore.toLocaleString()} Poin`;
+
+            document.getElementById('report-modal').classList.remove('hidden');
+        }
+
+        // Update UI Header & Indicators
+        function updateUI() {
+            document.getElementById('season-badge').innerText = `Musim ke-${gameState.season}`;
+            document.getElementById('soil-health-val').innerText = `${Math.round(gameState.soilHealth)}%`;
+            document.getElementById('water-bank-val').innerText = `${gameState.waterStock}/${gameState.waterStock}`;
+            
+            const totalBee = gameState.plots.filter(p => p !== null).reduce((sum, cropId) => sum + MASTER_CROPS[cropId].bee, 0);
+            document.getElementById('bee-pop-val').innerText = `${totalBee}`;
+        }
+    </script>
 </body>
 </html>
